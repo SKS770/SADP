@@ -1,0 +1,95 @@
+Q.1
+
+
+import java.util.Observable;
+import java.util.Observer;
+
+// Observable class
+class WeatherData extends Observable {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+
+    public void measurementsChanged() {
+        setChanged(); // mark as changed
+        notifyObservers(); // notify all observers
+    }
+
+    public void setMeasurements(float temperature, float humidity, float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        measurementsChanged();
+    }
+
+    public float getTemperature() { return temperature; }
+    public float getHumidity() { return humidity; }
+    public float getPressure() { return pressure; }
+}
+
+// Observer class
+class CurrentConditionsDisplay implements Observer {
+    private float temperature;
+    private float humidity;
+    private float pressure;
+
+    public CurrentConditionsDisplay(Observable observable) {
+        observable.addObserver(this);
+    }
+
+    @Override
+    public void update(Observable obs, Object arg) {
+        if (obs instanceof WeatherData) {
+            WeatherData weatherData = (WeatherData) obs;
+            this.temperature = weatherData.getTemperature();
+            this.humidity = weatherData.getHumidity();
+            this.pressure = weatherData.getPressure();
+            display();
+        }
+    }
+
+    public void display() {
+        System.out.println("Current Conditions: " + temperature + "°C, " + humidity + "% Humidity, " + pressure + " hPa");
+    }
+}
+
+// Main class
+public class WeatherStationDemo {
+    public static void main(String[] args) {
+        WeatherData weatherData = new WeatherData();
+        CurrentConditionsDisplay currentDisplay = new CurrentConditionsDisplay(weatherData);
+
+        // Simulate new weather measurements
+        weatherData.setMeasurements(30.5f, 65f, 1013f);
+        weatherData.setMeasurements(28.2f, 70f, 1010f);
+        weatherData.setMeasurements(32.0f, 60f, 1015f);
+    }
+}
+
+
+
+Q.2
+
+
+const int ldrPin = A0;   // LDR analog input pin
+const int ledPin = 9;    // LED PWM output pin
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int ldrValue = analogRead(ldrPin); // read LDR value (0-1023)
+  
+  // Map LDR value to LED brightness (0-255)
+  int ledBrightness = map(ldrValue, 0, 1023, 0, 255);
+
+  analogWrite(ledPin, ledBrightness); // set LED brightness
+  Serial.print("LDR Value: ");
+  Serial.print(ldrValue);
+  Serial.print(" -> LED Brightness: ");
+  Serial.println(ledBrightness);
+
+  delay(200); // small delay
+}

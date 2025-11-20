@@ -1,0 +1,115 @@
+Q.1
+
+import java.util.*;
+// Observable class
+class NumberSubject extends Observable {
+    private int decimalNumber;
+    public void setDecimalNumber(int number) {
+        this.decimalNumber = number;
+        setChanged();       // Mark as changed
+        notifyObservers();  // Notify all observers
+    }
+    public int getDecimalNumber() {
+        return decimalNumber;
+    }
+}
+// Observer for Hexadecimal
+class HexObserver implements Observer {
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof NumberSubject) {
+            int number = ((NumberSubject) o).getDecimalNumber();
+            System.out.println("Hexadecimal: " + Integer.toHexString(number).toUpperCase());
+        }
+    }
+}
+// Observer for Octal
+class OctalObserver implements Observer {
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof NumberSubject) {
+            int number = ((NumberSubject) o).getDecimalNumber();
+            System.out.println("Octal: " + Integer.toOctalString(number));
+        }
+    }
+}
+// Observer for Binary
+class BinaryObserver implements Observer {
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof NumberSubject) {
+            int number = ((NumberSubject) o).getDecimalNumber();
+            System.out.println("Binary: " + Integer.toBinaryString(number));
+        }
+    }
+}
+// Main class
+public class NumberObserverDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        NumberSubject subject = new NumberSubject();
+        // Attach observers
+        new HexObserver().update(subject, null); // Optional first display
+        subject.addObserver(new HexObserver());
+        subject.addObserver(new OctalObserver());
+        subject.addObserver(new BinaryObserver());
+        // Accept decimal numbers repeatedly
+        while (true) {
+            System.out.print("\nEnter a decimal number (or -1 to exit): ");
+            int num = sc.nextInt();
+            if (num == -1) break;
+            subject.setDecimalNumber(num);
+        }
+        sc.close();
+    }
+}
+
+
+Q.2
+
+*a) Read your name and print Hello message
+name = input("Enter your name: ")
+print("Hello, " + name + "!")
+
+*b) Read two numbers and print sum, difference, product, and division
+a = float(input("Enter first number: "))
+b = float(input("Enter second number: "))
+
+print("Sum:", a + b)
+print("Difference:", a - b)
+print("Product:", a * b)
+if b != 0:
+    print("Division:", a / b)
+else:
+    print("Division: Cannot divide by zero")
+
+*c) Word and character count of a given string
+text = input("Enter a string: ")
+words = len(text.split())
+chars = len(text)
+
+print("Word count:", words)
+print("Character count:", chars)
+
+*d) Area of a given shape (rectangle, triangle, circle)
+import math
+
+shape = input("Enter shape (rectangle/triangle/circle): ").lower()
+
+if shape == "rectangle":
+    length = float(input("Enter length: "))
+    width = float(input("Enter width: "))
+    area = length * width
+elif shape == "triangle":
+    base = float(input("Enter base: "))
+    height = float(input("Enter height: "))
+    area = 0.5 * base * height
+elif shape == "circle":
+    radius = float(input("Enter radius: "))
+    area = math.pi * radius**2
+else:
+    area = None
+    print("Invalid shape")
+
+if area is not None:
+    print("Area of", shape, "is:", area)

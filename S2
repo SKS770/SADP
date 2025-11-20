@@ -1,0 +1,85 @@
+Q.1
+
+class Singleton {
+    private static volatile Singleton instance;
+    // private constructor
+    private Singleton() { 
+        System.out.println("Singleton Instance Created");
+    }
+    // Thread-safe method with Double-checked locking
+    public static Singleton getInstance() {
+        if (instance == null) {                     // First check
+            synchronized (Singleton.class) {
+                if (instance == null) {             // Second check  
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+    public void display() {
+        System.out.println("Thread " + Thread.currentThread().getName() +
+                           " is using the Singleton instance.");
+    }
+}
+class MyThread extends Thread {
+    public void run() {
+        Singleton obj = Singleton.getInstance();
+        obj.display();
+    }
+}
+public class SingletonMulti {
+    public static void main(String[] args) {
+        // Creating multiple threads to test singleton instance
+        Thread t1 = new MyThread();
+        Thread t2 = new MyThread();
+        Thread t3 = new MyThread();
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+
+Q.2
+
+// Ultrasonic sensor pins
+const int trigPin = 9;
+const int echoPin = 10;
+// LED pin
+const int ledPin = 13;
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+}
+void loop() {
+  long duration;
+  float distance;
+  // Clear the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Send a 10µs pulse to trigger ultrasonic burst
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Read echo time
+  duration = pulseIn(echoPin, HIGH);
+  // Calculate distance (speed of sound = 343m/s)
+  distance = duration * 0.034 / 2;  // cm
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+  // Blink LED if object is near (distance < 10 cm)
+  if (distance < 10) {
+    digitalWrite(ledPin, HIGH);
+    delay(200);
+    digitalWrite(ledPin, LOW);
+    delay(200);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+  delay(300);
+}
+

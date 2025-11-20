@@ -1,0 +1,110 @@
+Q.1
+
+
+// Shape interface
+interface Shape {
+    void draw();
+}
+
+// Concrete Shapes
+class Circle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+class Rectangle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+class Square implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Square");
+    }
+}
+
+// Abstract Factory
+interface AbstractFactory {
+    Shape getShape(String shapeType);
+}
+
+// Concrete Factory
+class ShapeFactory implements AbstractFactory {
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) return null;
+        if (shapeType.equalsIgnoreCase("CIRCLE")) return new Circle();
+        if (shapeType.equalsIgnoreCase("RECTANGLE")) return new Rectangle();
+        if (shapeType.equalsIgnoreCase("SQUARE")) return new Square();
+        return null;
+    }
+}
+
+// Factory Producer
+class FactoryProducer {
+    public static AbstractFactory getFactory() {
+        return new ShapeFactory();
+    }
+}
+
+// Main class
+public class AbstractFactoryShape {
+    public static void main(String[] args) {
+        AbstractFactory shapeFactory = FactoryProducer.getFactory();
+
+        Shape shape1 = shapeFactory.getShape("CIRCLE");
+        shape1.draw();
+
+        Shape shape2 = shapeFactory.getShape("RECTANGLE");
+        shape2.draw();
+
+        Shape shape3 = shapeFactory.getShape("SQUARE");
+        shape3.draw();
+    }
+}
+
+
+
+
+Q.2
+
+
+#include <DHT.h>
+
+#define DHTPIN 2     // Pin where DHT sensor is connected
+#define DHTTYPE DHT11   // DHT 11 sensor
+#define LEDPIN 13    // LED pin for notification
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  pinMode(LEDPIN, OUTPUT);
+  Serial.println("Temperature Notification System");
+}
+
+void loop() {
+  // Read temperature in Celsius
+  float temp = dht.readTemperature();
+
+  if (isnan(temp)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  Serial.print("Current Temperature: ");
+  Serial.print(temp);
+  Serial.println(" C");
+
+  // Turn LED on if temperature exceeds threshold (30°C)
+  if (temp > 30) {
+    digitalWrite(LEDPIN, HIGH);
+    Serial.println("Temperature high! LED ON");
+  } else {
+    digitalWrite(LEDPIN, LOW);
+  }
+
+  delay(2000); // Read every 2 seconds
+}

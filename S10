@@ -1,0 +1,151 @@
+Q.1
+
+// Fly behavior interface
+interface FlyBehavior {
+    void fly();
+}
+
+// Quack behavior interface
+interface QuackBehavior {
+    void quack();
+}
+
+// Concrete Fly behaviors
+class FlyWithWings implements FlyBehavior {
+    public void fly() {
+        System.out.println("I am flying with wings!");
+    }
+}
+
+class FlyNoWay implements FlyBehavior {
+    public void fly() {
+        System.out.println("I cannot fly.");
+    }
+}
+
+// Concrete Quack behaviors
+class Quack implements QuackBehavior {
+    public void quack() {
+        System.out.println("Quack! Quack!");
+    }
+}
+
+class Squeak implements QuackBehavior {
+    public void quack() {
+        System.out.println("Squeak! Squeak!");
+    }
+}
+
+// Duck abstract class
+abstract class Duck {
+    FlyBehavior flyBehavior;
+    QuackBehavior quackBehavior;
+
+    public void performFly() {
+        flyBehavior.fly();
+    }
+
+    public void performQuack() {
+        quackBehavior.quack();
+    }
+
+    public void setFlyBehavior(FlyBehavior fb) {
+        flyBehavior = fb;
+    }
+
+    public void setQuackBehavior(QuackBehavior qb) {
+        quackBehavior = qb;
+    }
+
+    public void swim() {
+        System.out.println("All ducks float!");
+    }
+
+    public abstract void display();
+}
+
+// Concrete Ducks
+class MallardDuck extends Duck {
+    public MallardDuck() {
+        flyBehavior = new FlyWithWings();
+        quackBehavior = new Quack();
+    }
+    public void display() {
+        System.out.println("I am a Mallard Duck");
+    }
+}
+
+class RubberDuck extends Duck {
+    public RubberDuck() {
+        flyBehavior = new FlyNoWay();
+        quackBehavior = new Squeak();
+    }
+    public void display() {
+        System.out.println("I am a Rubber Duck");
+    }
+}
+
+// Main class
+public class DuckStrategy {
+    public static void main(String[] args) {
+        Duck mallard = new MallardDuck();
+        Duck rubber = new RubberDuck();
+
+        mallard.display();
+        mallard.performFly();
+        mallard.performQuack();
+
+        System.out.println();
+
+        rubber.display();
+        rubber.performFly();
+        rubber.performQuack();
+
+        System.out.println("\nChanging Rubber Duck to fly with wings...");
+        rubber.setFlyBehavior(new FlyWithWings());
+        rubber.performFly();
+    }
+}
+
+
+
+Q.2
+
+*a) Print a name 'n' times using for and while loops
+name = input("Enter your name: ")
+n = int(input("Enter how many times to print: "))
+
+print("\nUsing for loop:")
+for i in range(n):
+    print(name)
+
+print("\nUsing while loop:")
+i = 0
+while i < n:
+    print(name)
+    i += 1
+
+*b) Handle Divide by Zero Exception
+try:
+    a = int(input("Enter numerator: "))
+    b = int(input("Enter denominator: "))
+    result = a / b
+    print("Result:", result)
+except ZeroDivisionError:
+    print("Error: Division by zero is not allowed")
+
+*c) Print current time 10 times with 10-second interval
+import time
+from datetime import datetime
+
+for i in range(10):
+    print("Current time:", datetime.now().strftime("%H:%M:%S"))
+    time.sleep(10)
+
+d) Read a file line by line and print word count of each line
+filename = input("Enter filename: ")
+
+with open(filename, 'r') as file:
+    for line_no, line in enumerate(file, start=1):
+        words = len(line.split())
+        print(f"Line {line_no}: Word count = {words}")

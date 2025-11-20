@@ -1,0 +1,161 @@
+Q.1
+
+
+// Command interface
+interface Command {
+    void execute();
+    void undo();
+}
+
+// Receiver class
+class CeilingFan {
+    public void high() {
+        System.out.println("Ceiling Fan is on HIGH");
+    }
+    public void medium() {
+        System.out.println("Ceiling Fan is on MEDIUM");
+    }
+    public void low() {
+        System.out.println("Ceiling Fan is on LOW");
+    }
+    public void off() {
+        System.out.println("Ceiling Fan is OFF");
+    }
+}
+
+// Concrete Commands
+class CeilingFanHighCommand implements Command {
+    private CeilingFan fan;
+    private String prevState;
+
+    public CeilingFanHighCommand(CeilingFan fan) {
+        this.fan = fan;
+    }
+
+    public void execute() {
+        prevState = "HIGH"; // store previous state
+        fan.high();
+    }
+
+    public void undo() {
+        fan.off();
+        System.out.println("Undo: Fan returned to previous state (" + prevState + ")");
+    }
+}
+
+class CeilingFanOffCommand implements Command {
+    private CeilingFan fan;
+
+    public CeilingFanOffCommand(CeilingFan fan) {
+        this.fan = fan;
+    }
+
+    public void execute() {
+        fan.off();
+    }
+
+    public void undo() {
+        fan.high(); // simple undo example
+        System.out.println("Undo: Fan returned to HIGH");
+    }
+}
+
+// Invoker
+class RemoteControl {
+    private Command slot;
+    private Command lastCommand;
+
+    public void setCommand(Command command) {
+        slot = command;
+    }
+
+    public void pressButton() {
+        slot.execute();
+        lastCommand = slot;
+    }
+
+    public void pressUndo() {
+        if (lastCommand != null) {
+            lastCommand.undo();
+        }
+    }
+}
+
+// Main class
+public class CeilingFanTest {
+    public static void main(String[] args) {
+        RemoteControl remote = new RemoteControl();
+        CeilingFan ceilingFan = new CeilingFan();
+
+        CeilingFanHighCommand high = new CeilingFanHighCommand(ceilingFan);
+        CeilingFanOffCommand off = new CeilingFanOffCommand(ceilingFan);
+
+        remote.setCommand(high);
+        remote.pressButton();
+        remote.pressUndo();
+
+        remote.setCommand(off);
+        remote.pressButton();
+        remote.pressUndo();
+    }
+}
+
+
+
+Q.2
+
+
+# List files and directories
+ls
+
+# Change directory
+cd /home/pi/Documents
+
+# Create a new file
+touch myfile.txt
+
+# Move/rename a file
+mv myfile.txt myfile_renamed.txt
+
+# Remove a file
+rm myfile_renamed.txt
+
+# View manual of a command
+man ls
+
+# Make a new directory
+mkdir mydir
+
+# Remove a directory
+rmdir mydir
+
+# Create a tar archive
+tar -cvf archive.tar file1.txt file2.txt
+
+# Compress using gzip
+gzip archive.tar
+
+# Display file contents
+cat file1.txt
+
+# View file page by page
+more file1.txt
+less file1.txt
+
+# Check running processes
+ps
+
+# Run commands as superuser
+sudo apt update
+
+# Schedule tasks (edit crontab)
+crontab -e
+
+# Change file owner
+sudo chown pi file1.txt
+
+# Change group ownership
+sudo chgrp pi file1.txt
+
+# Ping a server
+ping google.com

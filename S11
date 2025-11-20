@@ -1,0 +1,138 @@
+Q.1
+
+// Shape interface
+interface Shape {
+    void draw();
+}
+
+// Concrete Shapes
+class Circle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+class Rectangle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+class Square implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Square");
+    }
+}
+
+// Abstract Factory
+interface AbstractFactory {
+    Shape getShape(String shapeType);
+}
+
+// Concrete Factory
+class ShapeFactory implements AbstractFactory {
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) return null;
+        if (shapeType.equalsIgnoreCase("CIRCLE")) return new Circle();
+        if (shapeType.equalsIgnoreCase("RECTANGLE")) return new Rectangle();
+        if (shapeType.equalsIgnoreCase("SQUARE")) return new Square();
+        return null;
+    }
+}
+
+// Factory Producer
+class FactoryProducer {
+    public static AbstractFactory getFactory() {
+        return new ShapeFactory();
+    }
+}
+
+// Main class
+public class AbstractFactoryShape {
+    public static void main(String[] args) {
+        AbstractFactory shapeFactory = FactoryProducer.getFactory();
+
+        Shape shape1 = shapeFactory.getShape("CIRCLE");
+        shape1.draw();
+
+        Shape shape2 = shapeFactory.getShape("RECTANGLE");
+        shape2.draw();
+
+        Shape shape3 = shapeFactory.getShape("SQUARE");
+        shape3.draw();
+    }
+}
+
+
+
+Q.2
+
+
+*a) Light an LED through Python program
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED_PIN = 18
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+GPIO.output(LED_PIN, GPIO.HIGH)  # Turn LED ON
+time.sleep(2)
+GPIO.output(LED_PIN, GPIO.LOW)   # Turn LED OFF
+
+GPIO.cleanup()
+
+*b) Get input from two switches and switch on corresponding LEDs
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+
+SW1 = 17
+SW2 = 27
+LED1 = 22
+LED2 = 23
+
+GPIO.setup(SW1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(SW2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(LED1, GPIO.OUT)
+GPIO.setup(LED2, GPIO.OUT)
+
+try:
+    while True:
+        GPIO.output(LED1, GPIO.input(SW1))
+        GPIO.output(LED2, GPIO.input(SW2))
+finally:
+    GPIO.cleanup()
+
+*c) Flash an LED at given on/off time from a file
+
+times.txt (example file content):
+
+2
+1
+
+
+First line → ON time (seconds)
+
+Second line → OFF time (seconds)
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED_PIN = 18
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+# Read times from file
+with open("times.txt", "r") as f:
+    on_time = float(f.readline())
+    off_time = float(f.readline())
+
+try:
+    while True:
+        GPIO.output(LED_PIN, GPIO.HIGH)
+        time.sleep(on_time)
+        GPIO.output(LED_PIN, GPIO.LOW)
+        time.sleep(off_time)
+finally:
+    GPIO.cleanup()

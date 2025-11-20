@@ -1,0 +1,101 @@
+Q.1
+
+// Strategy interfaces
+interface FlyBehavior {
+    void fly();
+}
+interface QuackBehavior {
+    void quack();
+}
+// Concrete Fly behaviors
+class FlyWithWings implements FlyBehavior {
+    public void fly() {
+        System.out.println("I am flying with wings!");
+    }
+}
+class FlyNoWay implements FlyBehavior {
+    public void fly() {
+        System.out.println("I cannot fly.");
+    }
+}
+// Concrete Quack behaviors
+class Quack implements QuackBehavior {
+    public void quack() {
+        System.out.println("Quack! Quack!");
+    }
+}
+class Squeak implements QuackBehavior {
+    public void quack() {
+        System.out.println("Squeak! Squeak!");
+    }
+}
+// Duck abstract class
+abstract class Duck {
+    FlyBehavior flyBehavior;
+    QuackBehavior quackBehavior;
+    public void performFly() {
+        flyBehavior.fly();
+    }
+    public void performQuack() {
+        quackBehavior.quack();
+    }
+    public void setFlyBehavior(FlyBehavior fb) {
+        flyBehavior = fb;
+    }
+    public void setQuackBehavior(QuackBehavior qb) {
+        quackBehavior = qb;
+    }
+    public void swim() {
+        System.out.println("All ducks float, even decoys!");
+    }
+    public abstract void display();
+}
+// Concrete Duck classes
+class MallardDuck extends Duck {
+    public MallardDuck() {
+        flyBehavior = new FlyWithWings();
+        quackBehavior = new Quack();
+    }
+    public void display() {
+        System.out.println("I am a Mallard Duck");
+    }
+}
+class RubberDuck extends Duck {
+    public RubberDuck() {
+        flyBehavior = new FlyNoWay();
+        quackBehavior = new Squeak();
+    }
+    public void display() {
+        System.out.println("I am a Rubber Duck");
+    }
+}
+// Main class
+public class DuckStrategy {
+    public static void main(String[] args) {
+        Duck mallard = new MallardDuck();
+        Duck rubber = new RubberDuck();
+        mallard.display();
+        mallard.performFly();
+        mallard.performQuack();
+        System.out.println();
+        rubber.display();
+        rubber.performFly();
+        rubber.performQuack();
+        System.out.println("\nChanging Rubber Duck to fly with wings...");
+        rubber.setFlyBehavior(new FlyWithWings());
+        rubber.performFly();
+    }
+}
+
+
+Q.2
+
+ls
+mkdir test
+cd test
+touch file1.txt
+echo "Hello Pi" > file1.txt
+cat file1.txt
+rm file1.txt
+cd ..
+rmdir test

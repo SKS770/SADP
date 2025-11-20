@@ -1,0 +1,97 @@
+Q.1
+
+// Component Interface
+interface Car {
+    void assemble();
+}
+
+// Concrete Component
+class BasicCar implements Car {
+    public void assemble() {
+        System.out.print("Basic Car.");
+    }
+}
+
+// Decorator class
+class CarDecorator implements Car {
+    protected Car car;
+    public CarDecorator(Car c) {
+        this.car = c;
+    }
+    public void assemble() {
+        this.car.assemble();
+    }
+}
+
+// Concrete Decorators
+class SportsCar extends CarDecorator {
+    public SportsCar(Car c) {
+        super(c);
+    }
+    public void assemble() {
+        super.assemble();
+        System.out.print(" Adding features of Sports Car.");
+    }
+}
+
+class LuxuryCar extends CarDecorator {
+    public LuxuryCar(Car c) {
+        super(c);
+    }
+    public void assemble() {
+        super.assemble();
+        System.out.print(" Adding features of Luxury Car.");
+    }
+}
+
+// Main class
+public class CarDecoratorDemo {
+    public static void main(String[] args) {
+        Car sportsCar = new SportsCar(new BasicCar());
+        sportsCar.assemble();
+        System.out.println();
+
+        Car luxuryCar = new LuxuryCar(new BasicCar());
+        luxuryCar.assemble();
+        System.out.println();
+    }
+}
+
+
+
+
+
+Q.2
+
+#include <WiFi.h> 
+// Use the below if using ESP8266
+// #include <ESP8266WiFi.h>
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+  Serial.println("S1J2: WiFi Network Scanner");
+
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(1000);
+}
+
+void loop() {
+  Serial.println("\nScanning for available networks...");
+  int n = WiFi.scanNetworks();
+
+  if (n == 0) {
+    Serial.println("No networks found.");
+  } else {
+    Serial.println(String(n) + " networks found:\n");
+    for (int i = 0; i < n; ++i) {
+      Serial.println(String(i + 1) + ". " +
+                     WiFi.SSID(i) +
+                     " | Signal: " + String(WiFi.RSSI(i)) + " dBm" +
+                     " | Encryption: " +
+                     (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "Open" : "Secure"));
+    }
+  }
+  delay(5000); // Repeat scan every 5 seconds
+}

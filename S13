@@ -1,0 +1,95 @@
+Q.1
+
+
+// Target interface
+interface IVolt {
+    int getVolt();
+}
+
+// Adaptee class
+class Socket {
+    public int getVolt120() {
+        return 120;
+    }
+}
+
+// Adapter class using Class Adapter approach (Inheritance)
+class VoltAdapter extends Socket implements IVolt {
+    private int outputVolt;
+
+    public VoltAdapter(int v) {
+        this.outputVolt = v;
+    }
+
+    @Override
+    public int getVolt() {
+        switch (outputVolt) {
+            case 3: return 3;
+            case 12: return 12;
+            default: return getVolt120();
+        }
+    }
+}
+
+// Main class
+public class MobileChargerAdapter {
+    public static void main(String[] args) {
+        IVolt v3 = new VoltAdapter(3);
+        IVolt v12 = new VoltAdapter(12);
+        IVolt v120 = new VoltAdapter(120);
+
+        System.out.println("3 Volt Output: " + v3.getVolt() + "V");
+        System.out.println("12 Volt Output: " + v12.getVolt() + "V");
+        System.out.println("Default 120 Volt Output: " + v120.getVolt() + "V");
+    }
+}
+
+
+
+
+Q.2
+
+
+// Ultrasonic sensor pins
+const int trigPin = 9;
+const int echoPin = 10;
+
+// LED pin
+const int ledPin = 13;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  long duration, distance;
+  
+  // Send pulse
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read echo
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in cm
+  distance = duration * 0.034 / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Blink LED if object is within 10 cm
+  if (distance < 10) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+
+  delay(500); // half-second delay
+}

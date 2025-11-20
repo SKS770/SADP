@@ -1,0 +1,123 @@
+Q.1
+
+// Command Interface
+interface Command {
+    void execute();
+    void undo();
+}
+// Receiver Class
+class CeilingFan {
+    public static final int HIGH = 3;
+    public static final int MEDIUM = 2;
+    public static final int LOW = 1;
+    public static final int OFF = 0;
+    private int speed;
+    public CeilingFan() {
+        speed = OFF;
+    }
+    public void high() {
+        speed = HIGH;
+        System.out.println("Ceiling Fan is on HIGH");
+    }
+    public void medium() {
+        speed = MEDIUM;
+        System.out.println("Ceiling Fan is on MEDIUM");
+    }
+    public void low() {
+        speed = LOW;
+        System.out.println("Ceiling Fan is on LOW");
+    }
+    public void off() {
+        speed = OFF;
+        System.out.println("Ceiling Fan is OFF");
+    }
+    public int getSpeed() {
+        return speed;
+    }
+}
+// Concrete Command
+class CeilingFanHighCommand implements Command {
+    private CeilingFan ceilingFan;
+    private int prevSpeed;
+    public CeilingFanHighCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+    public void execute() {
+        prevSpeed = ceilingFan.getSpeed();
+        ceilingFan.high();
+    }
+    public void undo() {
+        if (prevSpeed == CeilingFan.HIGH) ceilingFan.high();
+        else if (prevSpeed == CeilingFan.MEDIUM) ceilingFan.medium();
+        else if (prevSpeed == CeilingFan.LOW) ceilingFan.low();
+        else ceilingFan.off();
+    }
+}
+// Concrete Command to turn OFF
+class CeilingFanOffCommand implements Command {
+    private CeilingFan ceilingFan;
+    private int prevSpeed;
+    public CeilingFanOffCommand(CeilingFan ceilingFan) {
+        this.ceilingFan = ceilingFan;
+    }
+    public void execute() {
+        prevSpeed = ceilingFan.getSpeed();
+        ceilingFan.off();
+    }
+    public void undo() {
+        if (prevSpeed == CeilingFan.HIGH) ceilingFan.high();
+        else if (prevSpeed == CeilingFan.MEDIUM) ceilingFan.medium();
+        else if (prevSpeed == CeilingFan.LOW) ceilingFan.low();
+        else ceilingFan.off();
+    }
+}
+// Invoker
+class RemoteControl {
+    private Command command;
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+    public void pressButton() {
+        command.execute();
+    }
+    public void pressUndo() {
+        command.undo();
+    }
+}
+// Main class
+public class CeilingFanUndoTest {
+    public static void main(String[] args) {
+        RemoteControl remote = new RemoteControl();
+        CeilingFan fan = new CeilingFan();
+        CeilingFanHighCommand high = new CeilingFanHighCommand(fan);
+        CeilingFanOffCommand off = new CeilingFanOffCommand(fan);
+        // Turn fan ON high
+        remote.setCommand(high);
+        remote.pressButton();
+        // Turn fan OFF
+        remote.setCommand(off);
+        remote.pressButton();
+        // Undo last command (turn fan back to previous speed)
+        remote.pressUndo();
+    }
+}
+
+
+
+Q.2
+
+const int LDRPin = A0;  // LDR connected to A0
+const int LEDPin = 9;   // LED connected to PWM pin 9
+void setup() {
+  pinMode(LEDPin, OUTPUT);
+  Serial.begin(9600);
+}
+void loop() {
+  int LDRValue = analogRead(LDRPin); // Read LDR
+  Serial.print("LDR Value: ");
+  Serial.println(LDRValue);
+  // Map LDR value to PWM range (0-255)
+  int brightness = map(LDRValue, 0, 1023, 0, 255);
+  analogWrite(LEDPin, brightness);   // Set LED brightness
+  delay(100);
+}

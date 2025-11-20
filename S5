@@ -1,0 +1,67 @@
+Q.1
+
+import java.util.*;
+// Adapter class implementing Iterator interface
+class EnumerationIteratorAdapter<E> implements Iterator<E> {
+    private Enumeration<E> enumeration;
+    public EnumerationIteratorAdapter(Enumeration<E> enumeration) {
+        this.enumeration = enumeration;
+    }
+    @Override
+    public boolean hasNext() {
+        return enumeration.hasMoreElements();
+    }
+    @Override
+    public E next() {
+        return enumeration.nextElement();
+    }
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Remove not supported");
+    }
+}
+public class EnumerationAdapter {
+    public static void main(String[] args) {
+        // Create a legacy Vector
+        Vector<String> v = new Vector<>();
+        v.add("Apple");
+        v.add("Banana");
+        v.add("Cherry");
+        // Get Enumeration
+        Enumeration<String> e = v.elements();
+        // Convert Enumeration to Iterator using Adapter
+        Iterator<String> it = new EnumerationIteratorAdapter<>(e);
+        System.out.println("Iterating using Adapter Pattern:");
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+    }
+}
+
+
+Q.2
+
+#include <WiFi.h>       // For ESP32
+// #include <ESP8266WiFi.h> // Uncomment for ESP8266
+// Replace with your Wi-Fi credentials
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+  Serial.println();
+  Serial.println("Connecting to WiFi...");
+  WiFi.begin(ssid, password);
+  // Wait until connection established
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+  Serial.println("Connected to WiFi!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+void loop() {
+  // You can add code to use WiFi connection
+}
